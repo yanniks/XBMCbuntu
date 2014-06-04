@@ -21,11 +21,35 @@
 xbmcUser=$1
 xbmcParams=$2
 
-#
-# stop Samba
-#
+# stop netatalk
+service netatalk stop
+rm -f /etc/netatalk/afpd.conf /etc/netatalk/afp_ldap.conf /etc/netatalk/AppleVolumes.default /etc/netatalk/atalkd.conf /etc/netatalk/papd.conf >/dev/null 2>&1
+cat > /etc/netatalk/afpd.conf << EOF
+- -tcp -ipaddr 10.0.0.5 -noddp -uamlist uams_dhx.so,uams_dhx2.so -nosavepassword
+EOF
+touch /etc/netatalk/afp_ldap.conf
+cat > /etc/netatalk/AppleVolumes.default << EOF
+:DEFAULT: options:upriv,usedots
+/media/Volume/Files/Movies "Movies" allow:yannik cnidscheme:cdb
+/media/Volume/Files/Musik "Music" allow:yannik cnidscheme:cdb
+/home/yannik/repos "git" allow:yannik cnidscheme:cdb
+"/home/yannik/TV Shows" "TV Shows" allow:yannik cnidscheme:cdb
+/media/Volume/Files/Downloads "Downloads" allow:yannik cnidscheme:cdb
+/media/Volume/Files "Medienplatte" allow:yannik cnidscheme:cdb
+/media/Volume "Volume" allow:yannik cnidscheme:cdb
+/media/Volume/Files/Bilder "Pictures" allow:yannik cnidscheme:cdb
+/home/yannik/.xbmc "System" allow:yannik cnidscheme:cdb
+/home/yannik/TimeMachine     "Yanniks_MBP" allow:yannik cnidscheme:dbd options:upriv,usedots,tm volsizelimit:1000000
+EOF
+touch /etc/netatalk/atalkd.conf
+touch /etc/netatalk/papd.conf
+
+# start netatalk
+service netatalk start
 
 update-rc.d smbd defaults
+
+# stop Samba
 service smbd stop
 
 #

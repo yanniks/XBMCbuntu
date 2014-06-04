@@ -46,3 +46,6 @@ libcec2
 xbmc-pvr-demo 
 xbmc-pvr-tvheadend-hts 
 
+# My stuff
+openjdk-7-jre icedtea-7-plugin
+jenkins apache2 libapache2-mod-php5 php5 php5-mysql mysql-server openvpn git wput wget whois unzip openssl ntp gzip gitweb curl ant
